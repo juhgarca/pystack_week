@@ -1,4 +1,5 @@
-.venvpsw/
+.venvpsw/*
 db.sqlite3
 *.py[cod]
 *$py.class
+media/
