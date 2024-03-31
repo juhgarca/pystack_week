@@ -3,13 +3,12 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.messages import constants
 
-from .models import Apostila, ViewApostila
+from .models import Apostila, Tags, ViewApostila
 
 def adicionar_apostilas(request):
 
     if request.method == "GET":
         apostilas = Apostila.objects.filter(user=request.user)
-        # TODO: criar as tags
         views_totais = ViewApostila.objects.filter(apostila__user=request.user).count()
 
         context = {
@@ -27,6 +26,18 @@ def adicionar_apostilas(request):
             titulo = titulo,
             arquivo = arquivo
         )
+
+        apostila.save()
+
+        tags = request.POST.get('tags')
+        list_tags = tags.split(',')
+
+        for tag in list_tags:
+            nova_tag = Tags(
+                nome=tag
+            )
+            nova_tag.save()
+            apostila.tags.add(nova_tag)
 
         apostila.save()
 
